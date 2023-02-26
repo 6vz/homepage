@@ -1,4 +1,5 @@
-<script>
+
+<script lang="ts">
   import { fade } from 'svelte/transition';
 
   let loaded = false;
@@ -28,54 +29,40 @@
   let placeholder_poss = ["Facebook","YouTube","Google","Gmail","Amazon","Weather","Netflix","Translate","WhatsApp","Instagram","Yahoo","Twitter","eBay","Maps","Wikipedia","LinkedIn","Hotmail","Pinterest","PayPal","Outlook","News","Bank of America","CNN","Apple","Instagram login","Craigslist","Target","ESPN","WalMart","CNN news","Delta","Home Depot","Best Buy","Google Maps","Netflix login","Gmail login","Lowes","MSN"]
   let random_poss = placeholder_poss[Math.floor(Math.random() * placeholder_poss.length)];
   random_poss = '🔍 ' + random_poss;
+
+  function handleSearch(searchEngine: string) {
+    let search = (document.getElementById("search-bar") as HTMLInputElement).value;
+    let baseUrl = '';
+    if (searchEngine === 'google') {
+      baseUrl = "https://www.google.com/search?q=";
+    } else if (searchEngine === 'duckduckgo') {
+      baseUrl = "https://duckduckgo.com/?q=";
+    } else if (searchEngine === 'perplexity') {
+      baseUrl = "https://perplexity.ai/search?q=";
+    }
+    window.location.href = baseUrl + search;
+  }
 </script>
 
-
 <div id="content">
-  {#if loaded}
   <div class="position-absolute top-50 start-50 translate-middle" id="box" transition:fade>
-      <h1 class="title">{greeting}</h1>
-      <p class="subtitle">{welcomeMessage}</p>
-      <br>
-      <input class="input" id="search-bar" type="text" placeholder="{random_poss}">
-      <br><br><br>
-      <div class="container whatsize text-center">
-        <div class="row">
-          <div class="col">
-            <img src="https://i.imgur.com/DUCTmkN.png"class="icon" alt="">
-          </div>
-          <div class="col">
-            <img src="https://i.imgur.com/z0GJTor.png" class="icon" alt="">
-          </div>
-          <div class="col">
-            <img src="https://i.imgur.com/ib02W6Q.png" class="icon" alt="">
-          </div>
+    <h1 class="title">{greeting}</h1>
+    <p class="subtitle">{welcomeMessage}</p>
+    <br>
+    <input class="input" id="search-bar" type="text" placeholder="{random_poss}">
+    <br><br><br>
+    <div class="container whatsize text-center">
+      <div class="row">
+        <div class="col">
+          <img src="https://i.imgur.com/DUCTmkN.png" on:click={() => handleSearch('google')} class="icon" alt="">
+        </div>
+        <div class="col">
+          <img src="https://i.imgur.com/z0GJTor.png" on:click={() => handleSearch('duckduckgo')} class="icon" alt="">
+        </div>
+        <div class="col">
+          <img src="https://i.imgur.com/ib02W6Q.png" on:click={() => handleSearch('perplexity')} class="icon" alt="">
         </div>
       </div>
-      
-
+    </div>
   </div>
-  {/if}
-  <script>
-    function google() {
-      let search = document.getElementById("search-bar").value;
-      window.location.href = "https://www.google.com/search?q=" + search;
-    }
-
-    function duckduckgo() {
-      let search = document.getElementById("search-bar").value;
-      window.location.href = "https://duckduckgo.com/?q=" + search;
-    }
-
-    function perplexity() {
-      let search = document.getElementById("search-bar").value;
-      window.location.href = "https://perplexity.ai/search?q=" + search;
-    }
-
-    document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-      google()
-    }
-  });
-  </script>
 </div>
